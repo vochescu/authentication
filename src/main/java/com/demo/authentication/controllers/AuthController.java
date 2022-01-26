@@ -1,11 +1,10 @@
 package com.demo.authentication.controllers;
 
+import com.demo.authentication.model.RegistrationRequest;
+import com.demo.authentication.model.RegistrationResponse;
 import com.demo.authentication.model.User;
 import com.demo.authentication.services.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +25,10 @@ public class AuthController {
     @GetMapping("/users/{username}")
     private User getUser(@PathVariable String username) {
         return userService.getUser(username);
+    }
+
+    @PostMapping("/register")
+    private RegistrationResponse getAllUsers(@RequestBody RegistrationRequest requestBody) {
+        return userService.saveUser(requestBody);
     }
 }

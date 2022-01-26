@@ -23,7 +23,11 @@ public class User {
         this.username = username;
         this.password = password;
         this.creationTimestamp = creationTimestamp;
-        this.role = role;
+        if(role == null){
+            this.role = Role.VIEWER;
+        } else {
+            this.role = role;
+        }
     }
 
     public String getUsername() {
