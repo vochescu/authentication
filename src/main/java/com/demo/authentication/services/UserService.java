@@ -1,12 +1,12 @@
 package com.demo.authentication.services;
 
+import com.demo.authentication.exceptions.ClientApiException;
 import com.demo.authentication.model.RegistrationRequest;
 import com.demo.authentication.model.RegistrationResponse;
 import com.demo.authentication.model.Role;
 import com.demo.authentication.model.User;
 import com.demo.authentication.repositories.UserRepository;
 import com.demo.authentication.utils.PasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -33,15 +33,16 @@ public class UserService {
     }
 
     public RegistrationResponse saveUser(RegistrationRequest requestBody) {
+        if(userRepository.findAllByUsername(requestBody.getUsername()) != null){
+            throw new ClientApiException("Username already exists");
+        }
         User user = passwordEncoder.encodePassword(new User(
                 requestBody.getUsername(),
                 requestBody.getPassword(),
                 getCreationTime(),
                 Role.valueOf(requestBody.getRole())
                 ));
-        //TODO
-//        userRepository.findAllByUsername(user.getUsername());
-        userRepository.save(user);
+        user = userRepository.save(user);
         return new RegistrationResponse(user.getUsername());
     }
 
